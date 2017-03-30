@@ -1,0 +1,13 @@
+<!--
+  Generated template for the CompaniesList component.
+
+  See https://angular.io/docs/ts/latest/api/core/index/ComponentMetadata-class.html
+  for more info on Angular 2 Components.
+-->
+
+<ion-content class="card-background-page">
+  <ion-card *ngFor="let company of companies" (swipe)="swipeEvent($event)">
+    <img src="{{company.logo_url}}" alt="{{company.name}}">
+    <div class="card-title">{{company.name}}</div>
+  </ion-card>å
+</ion-content>
