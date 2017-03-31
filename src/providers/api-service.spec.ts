@@ -1,18 +1,18 @@
 import { ApiService } from './api-service';
 import { ReflectiveInjector } from '@angular/core';
-import { async, fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@angular/http';
 import { Response, ResponseOptions } from '@angular/http';
-import { MockBackend, MockConnection } from '@angular/http/testing';
+import { MockBackend } from '@angular/http/testing';
  
 describe('Api Service', () => {
 
     beforeEach(() => {
         this.injector = ReflectiveInjector.resolveAndCreate([
-        {provide: ConnectionBackend, useClass: MockBackend},
-        {provide: RequestOptions, useClass: BaseRequestOptions},
-        Http,
-        ApiService,
+            {provide: ConnectionBackend, useClass: MockBackend},
+            {provide: RequestOptions, useClass: BaseRequestOptions},
+            Http,
+            ApiService,
         ]);
         this.apiService = this.injector.get(ApiService);
         this.backend = this.injector.get(ConnectionBackend) as MockBackend;
