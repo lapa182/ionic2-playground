@@ -39,7 +39,6 @@ export class CompaniesListComponent {
 
     target.parentElement.remove();
 
-    console.log(event, this);
   }
 
 }
