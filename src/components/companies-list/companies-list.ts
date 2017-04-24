@@ -22,8 +22,9 @@ export class CompaniesListComponent {
     this.apiService = apiService;
   }
 
-  ngOnInit() {
-    this.apiService.findAll().then(data => this.companies = data);
+  // Adding as promise to control loading state
+  ngOnInit(): Promise<any> {
+    return this.apiService.findAll().subscribe(data => this.companies = data);
   }
 
   swipeEvent(event) {
