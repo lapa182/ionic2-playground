@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { CompaniesListComponent } from '../../components/companies-list/companies-list';
+import { LoadingService } from "../../providers/loading-service";
+import { Subscription } from "rxjs/Subscription";
 
 /*
   Generated class for the Companies page.
@@ -13,14 +15,25 @@ import { CompaniesListComponent } from '../../components/companies-list/companie
   templateUrl: 'companies.html',
   entryComponents:[
     CompaniesListComponent
-  ] // inject all grouped components here
+  ],
+  providers: [LoadingService]// inject all grouped components here
 })
 export class CompaniesPage {
+  subscription: Subscription;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+  constructor(public navCtrl: NavController, public navParams: NavParams, private loadingService:LoadingService) {}
+
+  ngOnInit() {
+    this.subscription = this.loadingService.isLoading.subscribe(loading => this.loadingService.showOrHideLoadingIndicator(loading));
+  }
+
+  ngOnDestroy() {         
+      this.subscription.unsubscribe();
+  }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CompaniesPage');
+    this.loadingService.toggleLoadingIndicator(true);
   }
 
 }

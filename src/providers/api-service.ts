@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
-import { LoadingController } from "ionic-angular";
 
 /*
   Generated class for the ApiService provider.
@@ -15,15 +14,11 @@ const SERVER_URL = "https://landing.jobs/api/v1/";
 @Injectable()
 export class ApiService {
   
-  constructor(public http: Http, public loadingCtrl: LoadingController) {
+  constructor(public http: Http) {
     this.http = http;
   }
 
   findAll() {
-    let loader = this.loadingCtrl.create({
-      spinner: 'crescent',
-      content: 'Please wait...'
-    });
 
     return this.http.get(SERVER_URL + '/companies')
           .map(res => res.json())

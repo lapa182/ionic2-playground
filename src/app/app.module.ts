@@ -6,8 +6,9 @@ import { CompaniesPage } from '../pages/companies/companies';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 
-import { CompaniesListComponent } from '../components/companies-list/companies-list';
 import { ApiService } from '../providers/api-service';
+import { LoadingService } from "../providers/loading-service";
+import { CompaniesListComponent } from '../components/companies-list/companies-list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -33,6 +34,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     TabsPage,
   ],
   providers: [
+    LoadingService,
     StatusBar,
     SplashScreen,
     ApiService,

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { ApiService } from '../../providers/api-service';
+import { LoadingService } from "../../providers/loading-service";
+import { ApiService } from "../../providers/api-service";
 
 /*
   Generated class for the CompaniesList component.
@@ -12,19 +13,21 @@ import { ApiService } from '../../providers/api-service';
   templateUrl: 'companies-list.html'
 })
 export class CompaniesListComponent {
+    private favorities: any = [];
+    private unlike: any = [];
+    public companies: any = [];
 
-  apiService;
-  favorities: any = [];
-  unlike: any = [];
-  companies: any = [];
-
-  constructor(apiService:ApiService) {
+  constructor(public apiService:ApiService, private loadingService:LoadingService) {
     this.apiService = apiService;
+    this.loadingService = loadingService;
   }
-
+  
   // Adding as promise to control loading state
-  ngOnInit(): Promise<any> {
-    return this.apiService.findAll().subscribe(data => this.companies = data);
+  ngOnInit() {
+    return this.apiService.findAll().subscribe(data => {
+      this.loadingService.toggleLoadingIndicator(false);
+      this.companies = data;
+    });
   }
 
   swipeEvent(event) {
