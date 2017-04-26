@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { LoadingService } from "../../providers/loading-service";
 import { ApiService } from "../../providers/api-service";
+import { Company } from "../../models/company";
 
 /*
   Generated class for the CompaniesList component.
@@ -15,7 +16,7 @@ import { ApiService } from "../../providers/api-service";
 export class CompaniesListComponent {
     private favorities: any = [];
     private unlike: any = [];
-    public companies: any = [];
+    public companies: Company[];
 
   constructor(public apiService:ApiService, private loadingService:LoadingService) {
     this.apiService = apiService;

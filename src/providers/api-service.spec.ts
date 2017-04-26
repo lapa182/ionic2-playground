@@ -1,59 +1,45 @@
-import { ApiService } from './api-service';
-import { ReflectiveInjector } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
-import { BaseRequestOptions, ConnectionBackend, Http, RequestOptions } from '@angular/http';
-import { Response, ResponseOptions } from '@angular/http';
-import { MockBackend } from '@angular/http/testing';
- 
-describe('Api Service', () => {
+import { TestBed, async, inject } from '@angular/core/testing';
+import { BaseRequestOptions, Response, ResponseOptions, Http } from '@angular/http';
+import { MockBackend, MockConnection } from '@angular/http/testing';
 
-    beforeEach(() => {
-        this.injector = ReflectiveInjector.resolveAndCreate([
-            {provide: ConnectionBackend, useClass: MockBackend},
-            {provide: RequestOptions, useClass: BaseRequestOptions},
-            Http,
-            ApiService,
-        ]);
-        this.apiService = this.injector.get(ApiService);
-        this.backend = this.injector.get(ConnectionBackend) as MockBackend;
-        this.backend.connections.subscribe((connection: any) => this.lastConnection = connection);
+import { ApiService } from './api-service';
+import { MockCompanies } from './api-service.mock';
+
+describe('Service: Api', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        ApiService,
+        MockBackend,
+        BaseRequestOptions,
+        {
+          provide: Http,
+          useFactory: (backend: MockBackend, defaultOptions: BaseRequestOptions) => {
+            return new Http(backend, defaultOptions);
+          },
+          deps: [MockBackend, BaseRequestOptions],
+        },
+      ]
+    });
+  });
+
+  it('should create a service', inject([ApiService], (service: ApiService) => {
+    expect(service).toBeTruthy();
+  }));
+
+  it('should return companies', inject([ApiService, MockBackend], (service: ApiService, backend: MockBackend) => {
+    let response = new ResponseOptions({
+      body: JSON.stringify(MockCompanies)
     });
 
+    const baseResponse = new Response(response);
 
-    it('findAll() should return some companies', fakeAsync(() => {
-       let result: String[];
-       this.apiService.findAll().then((companies: any) => result = companies);
-       this.lastConnection.mockRespond(new Response(new ResponseOptions({
-         body: [{
-                    "id": 1,
-                    "name": "Hackett, Treutel and Hartmann",
-                    "description": "facilitate sexy supply-chains",
-                    "logo_url": "https://example1.jpg",
-                    "website_url": "http://cristnienow.info/alyon",
-                    "created_at": "2015-02-12T19:01:34.529Z",
-                    "updated_at": "2015-02-12T19:01:34.529Z"
-                },
-                {
-                    "id": 2,
-                    "name": "Huels, Walsh and Lakin",
-                    "description": "unleash compelling systems",
-                    "logo_url": "https://example2.jpg",
-                    "website_url": "http://prohaskajast.name/benton",
-                    "created_at": "2015-02-12T19:01:36.726Z",
-                    "updated_at": "2015-02-12T19:01:36.726Z"
-                },
-                {
-                    "id": 3,
-                    "name": "Walker Group",
-                    "description": "optimize sexy architectures",
-                    "logo_url": "https://example3.jpg",
-                    "website_url": "http://runolfonoconner.biz/marcos_mckenzie",
-                    "created_at": "2015-02-12T19:01:38.207Z",
-                    "updated_at": "2015-02-12T19:01:38.207Z"
-                }],
-       })));
-       tick();
-       expect(result.length).toEqual(3, 'should contain given amount of companies');
-     }));
- 
+    backend.connections.subscribe(
+      (c: MockConnection) => c.mockRespond(baseResponse)
+    );
+
+    return service.findAll().subscribe( data => {
+      expect(data).toEqual(MockCompanies);
+    });
+  }));
 });
