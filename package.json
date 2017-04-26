@@ -9,7 +9,7 @@
     "ionic:build": "ionic-app-scripts build",
     "ionic:serve": "ionic-app-scripts serve",
     "test": "karma start ./karma.conf.js",
-    "test-coverage": "karma start ./test-config/karma.conf.js --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
+    "test-coverage": "karma start ./karma.conf.js --coverage && cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage"
   },
   "dependencies": {
     "@angular/common": "2.4.8",
